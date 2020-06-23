@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private Player _player;
     private Puck _puck;
+    private Rigidbody _puckRigidbody;
     private Arrow _arrow;
 
     private PoolManager _poolManager;
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviour
     private bool _isReleased;
 
     private float _nimDistToLock = 4.0f;
-    public float _thrust = 1.0f;
+    private float _thrust = 5.0f;
 
     public TextMeshProUGUI _text1;
     public TextMeshProUGUI _text2;
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
 
         _player = GetComponent<Player>();
         _puck = GameObject.Find("Puck").GetComponent<Puck>();
+        _puckRigidbody = _puck.GetComponent<Rigidbody>();
 
         if (_player != null) _player.transform.position = _playerStartPosition;
         if (_puck != null) _puck.transform.position = _puckStartPosition;
@@ -52,8 +54,6 @@ public class PlayerController : MonoBehaviour
 #if UNITY_EDITOR
         MouseMovementPlayer();
         PullPuck();
-        ReleasePuck();
-
 #endif
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        ReleasePuck();
     }
 
     private void MouseMovementPlayer()
@@ -124,8 +125,8 @@ public class PlayerController : MonoBehaviour
         {
             var puckPosition = _puck.transform.position;
             var playerPosition = _player.transform.position;
-
-            _puck.AddForce(playerPosition - puckPosition, _thrust);
+            
+            _puckRigidbody.velocity = (playerPosition - puckPosition) * _thrust;
             _arrow.gameObject.SetActive(false);
             if (_puck.PuckParticle.isPlaying) _puck.PuckParticle.Stop();
         }
