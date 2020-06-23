@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f520d6f75af3a62479c09e917c455943, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: 
-  Levels:
-  - BaseItemType: 0100000001000000
+  levels:
+  - playerBaseItemData: {fileID: 11400000, guid: 782a7df11f605844f98864aaefe95ce3,
+      type: 2}
+    aiBaseItemData: {fileID: 11400000, guid: 1e916209c7826474cbe7b6560a216049, type: 2}
+  - playerBaseItemData: {fileID: 11400000, guid: 9f2cf8b608410904aa159c6bf40f42b7,
+      type: 2}
+    aiBaseItemData: {fileID: 11400000, guid: 6adbc3ba20ed903409edd810bd46726e, type: 2}

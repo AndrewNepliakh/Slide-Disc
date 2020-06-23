@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public enum BaseItemType
-{
-    Cube = 0,
-    Rectangle
-}
-
 [Serializable]
 public class Level
 {
-    public List<BaseItemType> BaseItemType;
+    public BaseItemData playerBaseItemData;
+    public BaseItemData aiBaseItemData;
 }
 
 [CreateAssetMenu(fileName = "LevelData", menuName = "Data/LevelData")]
 public class LevelData : BaseInjectable
 {
-    public List<Level> Levels;
+    public List<Level> levels;
+
+    public List<BaseItemModel> GetPlayerBases(int level)
+    {
+        return levels[level].playerBaseItemData.baseItemModels;
+    }
+    
+    public List<BaseItemModel> GetAiBases(int level)
+    {
+        return levels[level].aiBaseItemData.baseItemModels;
+    }
 }

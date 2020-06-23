@@ -17,6 +17,12 @@ public class Pool : MonoBehaviour
         var go = Instantiate(prefab, parent);
         return go.GetComponent<T>();
     }
+    
+    public T Spawn<T>(GameObject prefab, Transform parent, Vector3 localPosition, Vector3 localRotation) where T : MonoBehaviour, IPoolable
+    {
+        var go = Instantiate(prefab, localPosition, Quaternion.Euler(localRotation), parent);
+        return go.GetComponent<T>();
+    }
 
     public T Activate<T>() where T : IPoolable
     {
