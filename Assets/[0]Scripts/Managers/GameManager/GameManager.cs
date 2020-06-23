@@ -18,7 +18,7 @@ public class GameManager : BaseInjectable, IAwake, IStart, IDisable
         _levelData = InjectBox.Get<LevelData>();
         _poolManager = InjectBox.Get<PoolManager>();
 
-        _level = 1;
+        _level = 0;
         _arena = GameObject.Find("Arena").GetComponent<Transform>();
     }
 
