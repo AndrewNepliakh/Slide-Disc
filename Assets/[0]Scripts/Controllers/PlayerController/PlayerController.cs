@@ -69,8 +69,10 @@ public class PlayerController : MonoBehaviour
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         TouchMovementPlayer();
-        if (Input.touchCount > 0) PullPuck();
-        if (Input.touchCount == 0 && _isPuckLocked) ReleasePuck();
+         if (Input.GetMouseButton(0)) PullPuck();
+        if (Input.GetMouseButtonUp(0) && _isPuckLocked) ReleasePuck();
+       // if (Input.touchCount > 0) PullPuck();
+       // if (Input.touches[0].phase == TouchPhase.Ended && _isPuckLocked) ReleasePuck();
         CheckPuckProximity();
 #endif
     }
@@ -172,6 +174,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (!_isPuckLocked) _player.transform.LookAt(_puck.transform);
+        
     }
 
     private void SetClampCoordinates()
@@ -183,7 +186,7 @@ public class PlayerController : MonoBehaviour
 
     private void TouchMovementPlayer()
     {
-        _text1.text = Input.touches.ToString();
+        _text1.text = "TouchMovementPlayer()";
 
         if (Input.touchCount == 1)
         {
@@ -191,10 +194,7 @@ public class PlayerController : MonoBehaviour
 
             var deltaX = firstTouch.deltaPosition.x * 2.0f * Time.deltaTime;
             var deltaZ = firstTouch.deltaPosition.y * 2.0f * Time.deltaTime;
-
-            _text2.text = "Delta X : " + deltaX;
-            _text2.text = "Delta Z :" + deltaZ;
-
+            
             _player.transform.position += new Vector3(deltaX, 0.0f, deltaZ);
 
             SetClampCoordinates();
