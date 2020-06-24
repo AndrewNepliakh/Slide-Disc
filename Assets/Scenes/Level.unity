@@ -6599,7 +6599,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stretchLineMaterial: {fileID: 2100000, guid: 4ceb89fb92b5a7949852b7299ad0871e,
     type: 2}
-  _stretchLinePrefab: {fileID: 662374482859486077, guid: 8fa5823d822372240a0c19bf3c00a7e9,
+  _stretchArrowPrefab: {fileID: 662374482859486077, guid: 8fa5823d822372240a0c19bf3c00a7e9,
+    type: 3}
+  _arrowPrefab: {fileID: 662374482859486077, guid: 3595c251e1988e8408c34029532a9a2b,
     type: 3}
   _text1: {fileID: 1390412238}
   _text2: {fileID: 132028339}

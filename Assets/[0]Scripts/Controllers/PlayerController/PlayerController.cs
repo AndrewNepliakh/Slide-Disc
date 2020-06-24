@@ -8,12 +8,13 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Material _stretchLineMaterial;
-    [SerializeField] private GameObject _stretchLinePrefab;
+    [SerializeField] private GameObject _stretchArrowPrefab;
+    [SerializeField] private GameObject _arrowPrefab;
 
     private Player _player;
     private Puck _puck;
     private Rigidbody _puckRigidbody;
+    private StretchArrow _stretchArrow;
     private Arrow _arrow;
 
     private PoolManager _poolManager;
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool _isReleased;
 
     private float _nimDistToLock = 4.0f;
-    private float _thrust = 4.0f;
+    private float _thrust = 40.0f;
 
     public TextMeshProUGUI _text1;
     public TextMeshProUGUI _text2;
@@ -41,13 +42,17 @@ public class PlayerController : MonoBehaviour
 
         _player = GetComponent<Player>();
         _puck = GameObject.Find("Puck").GetComponent<Puck>();
+        
         _puckRigidbody = _puck.GetComponent<Rigidbody>();
 
         if (_player != null) _player.transform.position = _playerStartPosition;
         if (_puck != null) _puck.transform.position = _puckStartPosition;
 
 
-        _arrow = _poolManager.Create<Arrow>(_stretchLinePrefab, _puck.transform);
+        _stretchArrow = _poolManager.Create<StretchArrow>(_stretchArrowPrefab, _puck.transform);
+        _stretchArrow.gameObject.SetActive(false);
+
+        _arrow = _poolManager.Create<Arrow>(_arrowPrefab, _player.transform);
         _arrow.gameObject.SetActive(false);
 
         _eventManager.Add<OnPuckCollideEvent>(OnPuckCollide);
@@ -110,17 +115,42 @@ public class PlayerController : MonoBehaviour
 
         if (_isPuckLocked)
         {
+            _puckRigidbody.velocity = Vector3.zero;
+            
+            _stretchArrow.gameObject.SetActive(true);
+            _stretchArrow.transform.LookAt(_player.transform);
+            
             _arrow.gameObject.SetActive(true);
-            _arrow.transform.LookAt(_player.transform);
+            _player.transform.LookAt(_puck.transform);
+            
+            var rot = Quaternion.LookRotation(_player.transform.position - _puck.transform.position);
+            _player.transform.rotation = new Quaternion(0.0f, rot.y, 0.0f, rot.w);
 
             var distance = Vector3.Distance(puckPosition, playerPosition);
-            var scale = _arrow.transform.localScale;
-            _arrow.transform.localScale = new Vector3(scale.x, scale.y, distance / 10);
+            var scale = _stretchArrow.transform.localScale;
+            
+            _stretchArrow.transform.localScale = new Vector3(scale.x, scale.y, distance / 10);
 
             if (!_puck.PuckParticle.isPlaying) _puck.PuckParticle.Play();
         }
     }
+    
+    private void ReleasePuck()
+    {
+        var puckPosition = _puck.transform.position;
+        var playerPosition = _player.transform.position;
 
+        _puckRigidbody.velocity = (playerPosition - puckPosition).normalized * _thrust;
+        
+        
+        _stretchArrow.gameObject.SetActive(false);
+        _arrow.gameObject.SetActive(false);
+
+        _isPuckLocked = false;
+
+        if (_puck.PuckParticle.isPlaying) _puck.PuckParticle.Stop();
+    }
+    
     private void CheckPuckProximity()
     {
         if (_isReleased)
@@ -130,25 +160,18 @@ public class PlayerController : MonoBehaviour
 
             if (Vector3.Distance(puckPosition, playerPosition) <= _nimDistToLock)
             {
-                _puck.transform.position = playerPosition;
+                if (playerPosition.z > -5.0f)
+                    _puck.transform.position = playerPosition + new Vector3(0.0f, 0.0f, -5.0f);
+                else
+                    _puck.transform.position = playerPosition;
+                
                 _puckRigidbody.velocity = Vector3.zero;
                 _isPuckLocked = true;
                 _isReleased = false;
             }
         }
-    }
 
-    private void ReleasePuck()
-    {
-        var puckPosition = _puck.transform.position;
-        var playerPosition = _player.transform.position;
-
-        _puckRigidbody.velocity = (playerPosition - puckPosition) * _thrust;
-        _arrow.gameObject.SetActive(false);
-
-        _isPuckLocked = false;
-
-        if (_puck.PuckParticle.isPlaying) _puck.PuckParticle.Stop();
+        if (!_isPuckLocked) _player.transform.LookAt(_puck.transform);
     }
 
     private void SetClampCoordinates()
