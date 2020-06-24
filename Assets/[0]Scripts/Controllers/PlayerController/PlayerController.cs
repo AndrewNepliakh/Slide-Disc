@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     private EventManager _eventManager;
 
     private readonly Vector3 _playerStartPosition = new Vector3(0.0f, 0.0f, -6.0f);
-    private readonly Vector3 _puckStartPosition = new Vector3(0.0f, 0.15f, -12.0f);
 
     private bool _isAboveUi;
     private bool _isPuckLocked;
@@ -46,9 +45,7 @@ public class PlayerController : MonoBehaviour
         _puckRigidbody = _puck.GetComponent<Rigidbody>();
 
         if (_player != null) _player.transform.position = _playerStartPosition;
-        if (_puck != null) _puck.transform.position = _puckStartPosition;
-
-
+        
         _stretchArrow = _poolManager.Create<StretchArrow>(_stretchArrowPrefab, _puck.transform);
         _stretchArrow.gameObject.SetActive(false);
 
@@ -69,10 +66,12 @@ public class PlayerController : MonoBehaviour
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         TouchMovementPlayer();
-         if (Input.GetMouseButton(0)) PullPuck();
+        if (Input.GetMouseButton(0)) PullPuck();
         if (Input.GetMouseButtonUp(0) && _isPuckLocked) ReleasePuck();
+
        // if (Input.touchCount > 0) PullPuck();
        // if (Input.touches[0].phase == TouchPhase.Ended && _isPuckLocked) ReleasePuck();
+
         CheckPuckProximity();
 #endif
     }
@@ -113,6 +112,7 @@ public class PlayerController : MonoBehaviour
         if (Vector3.Distance(puckPosition, playerPosition) <= _nimDistToLock)
         {
             _isPuckLocked = true;
+            _puck.IsPuckLocked = true;
         }
 
         if (_isPuckLocked)
@@ -149,8 +149,11 @@ public class PlayerController : MonoBehaviour
         _arrow.gameObject.SetActive(false);
 
         _isPuckLocked = false;
+        _puck.IsPuckLocked = false;
+        _puck.PuckSide = BaseItemSide.PlayerBaseItem;
 
         if (_puck.PuckParticle.isPlaying) _puck.PuckParticle.Stop();
+        _eventManager.TriggerEvent<OnPlayerCaughtEvent>();
     }
     
     private void CheckPuckProximity()
@@ -174,7 +177,6 @@ public class PlayerController : MonoBehaviour
         }
 
         if (!_isPuckLocked) _player.transform.LookAt(_puck.transform);
-        
     }
 
     private void SetClampCoordinates()

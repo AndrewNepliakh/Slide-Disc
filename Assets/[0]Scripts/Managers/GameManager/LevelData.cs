@@ -23,4 +23,9 @@ public class LevelData : BaseInjectable
     {
         return levels[level].aiBaseItemData.baseItemModels;
     }
+
+    public int GetLevelsCount()
+    {
+        return levels.Count;
+    }
 }

@@ -19,3 +19,6 @@ MonoBehaviour:
   - playerBaseItemData: {fileID: 11400000, guid: 9f2cf8b608410904aa159c6bf40f42b7,
       type: 2}
     aiBaseItemData: {fileID: 11400000, guid: 6adbc3ba20ed903409edd810bd46726e, type: 2}
+  - playerBaseItemData: {fileID: 11400000, guid: d3925c913c57d494eb717394d0f7ddc8,
+      type: 2}
+    aiBaseItemData: {fileID: 11400000, guid: 82e22de3092f5544f81e2ddffc24c076, type: 2}

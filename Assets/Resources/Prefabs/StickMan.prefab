@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 8296548226601741324}
   - component: {fileID: 1415621582837666450}
   - component: {fileID: 1908093101819773508}
+  - component: {fileID: 5591450629153395798}
   m_Layer: 0
-  m_Name: Player
+  m_Name: StickMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +105,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a9c5936c1c3aa459a9e0e8a3be42e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stretchArrowPrefab: {fileID: 0}
+  _arrowPrefab: {fileID: 0}
   _text1: {fileID: 0}
   _text2: {fileID: 0}
   _text3: {fileID: 0}
   _text4: {fileID: 0}
+--- !u!136 &5591450629153395798
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7719051748528904400}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.0025686
+  m_Height: 3.0830393
+  m_Direction: 1
+  m_Center: {x: -0.044991225, y: 1.5281427, z: -0.17524906}
