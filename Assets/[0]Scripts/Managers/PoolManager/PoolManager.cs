@@ -32,19 +32,22 @@ public class PoolManager : BaseInjectable
         return null;
     }
 
-    public T Create<T>(GameObject prefab, Transform parent,int poolSize = 0) where T : MonoBehaviour, IPoolable
+    public T Draw<T>(Vector3 localPosition = default, Vector3 localRotation = default) where T : MonoBehaviour, IPoolable
     {
-        AddPool(typeof(T), poolSize);
-        return GetPool(typeof(T)).Spawn<T>(prefab, parent);
+        return GetPool(typeof(T)).Activate<T>(localPosition, localRotation);
     }
     
-    public T Create<T>(GameObject prefab, Transform parent, Vector3 localPosition, Vector3 localRotation, int poolSize = 0) where T : MonoBehaviour, IPoolable
+    public T Draw<T>(GameObject prefab, Transform parent, Vector3 localPosition = default, Vector3 localRotation = default, int poolSize = 0) where T : MonoBehaviour, IPoolable
     {
         AddPool(typeof(T), poolSize);
-        return GetPool(typeof(T)).Spawn<T>(prefab, parent, localPosition, localRotation);
+        
+        Pool pool = GetPool(typeof(T));
+        var poolCount = pool.GetCount();
+        if(poolCount == 0) return pool.Spawn<T>(prefab, parent, localPosition, localRotation);
+        return Draw<T>(localPosition, localRotation);
     }
 
-    public void Deactivate<T>(T poolable) where T : MonoBehaviour, IPoolable
+    public void Remove<T>(T poolable) where T : MonoBehaviour, IPoolable
     {
         GetPool(typeof(T)).Deactivate(poolable);
     }

@@ -28,13 +28,15 @@ public class BaseItem : MonoBehaviour, IPoolable
 
     public void DestroyMesh(bool destroy)
     {
-        if (_destroyRoutine == null) _destroyRoutine = StartCoroutine(SplitMesh(destroy));
-        if (_destroyRoutine != null)
-        {
-            StopCoroutine(_destroyRoutine);
-            _destroyRoutine = null;
-            _destroyRoutine = StartCoroutine(SplitMesh(destroy));
-        }
+        _poolManager.Remove(this);
+        
+        // if (_destroyRoutine == null) _destroyRoutine = StartCoroutine(SplitMesh(destroy));
+        // if (_destroyRoutine != null)
+        // {
+        //     StopCoroutine(_destroyRoutine);
+        //     _destroyRoutine = null;
+        //     _destroyRoutine = StartCoroutine(SplitMesh(destroy));
+        // }
     }
 
     private IEnumerator SplitMesh(bool destroy)
@@ -116,7 +118,7 @@ public class BaseItem : MonoBehaviour, IPoolable
         yield return new WaitForSeconds(1.0f);
         if (destroy == true)
         {
-            _poolManager.GetPool(typeof(BaseItem)).Deactivate(this);
+            _poolManager.Remove(this);
         }
     }
 

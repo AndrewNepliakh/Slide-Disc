@@ -24,8 +24,6 @@ public class Puck : MonoBehaviour
         
         transform.position = _puckStartPosition;
         _rigidbody = GetComponent<Rigidbody>();
-        
-        _eventManager.Add<OnLevelOverEvent>((args) => { });
     }
 
     private void OnCollisionEnter(Collision col)

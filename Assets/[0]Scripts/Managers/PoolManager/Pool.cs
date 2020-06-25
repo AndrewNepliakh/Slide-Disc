@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Pool : MonoBehaviour
@@ -12,22 +14,32 @@ public class Pool : MonoBehaviour
         _pool = new Queue<IPoolable>(size);
     }
 
-    public T Spawn<T>(GameObject prefab, Transform parent) where T : MonoBehaviour, IPoolable
+    public T Spawn<T>(GameObject prefab, Transform parent, Vector3 localPosition = default,
+        Vector3 localRotation = default) where T : MonoBehaviour, IPoolable
     {
-        var go = Instantiate(prefab, parent);
-        return go.GetComponent<T>();
-    }
-    
-    public T Spawn<T>(GameObject prefab, Transform parent, Vector3 localPosition, Vector3 localRotation) where T : MonoBehaviour, IPoolable
-    {
-        var go = Instantiate(prefab, localPosition, Quaternion.Euler(localRotation), parent);
+        GameObject go;
+
+        if (localPosition == default && localRotation == default)
+        {
+            go = Instantiate(prefab, parent);
+        }
+        else
+        {
+            go = Instantiate(prefab, localPosition, Quaternion.Euler(localRotation), parent);
+        }
+
         return go.GetComponent<T>();
     }
 
-    public T Activate<T>() where T : IPoolable
+    public T Activate<T>(Vector3 localPosition = default, Vector3 localRotation = default)
+        where T : MonoBehaviour, IPoolable
     {
-        var poolable = (T)_pool.Dequeue();
+        var poolable = (T) _pool.Dequeue();
+
+        poolable.transform.position = localPosition;
+        poolable.transform.rotation = Quaternion.Euler(localRotation);
         poolable.OnActivate();
+
         return poolable;
     }
 
@@ -35,5 +47,10 @@ public class Pool : MonoBehaviour
     {
         _pool.Enqueue(obj);
         obj.OnDeactivate();
+    }
+
+    public int GetCount()
+    {
+        return _pool.Count;
     }
 }

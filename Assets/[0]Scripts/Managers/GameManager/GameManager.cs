@@ -50,14 +50,14 @@ public class GameManager : BaseInjectable, IAwake, IStart, IDisable
     {
         foreach (var baseItemModel in _levelData.GetPlayerBases(level))
         {
-            var baseItem = _poolManager.Create<BaseItem>(baseItemModel.prefab, _arena, baseItemModel.position,
+            var baseItem = _poolManager.Draw<BaseItem>(baseItemModel.prefab, _arena, baseItemModel.position,
                 baseItemModel.rotation);
             _baseItems.Add(baseItem);
         }
 
         foreach (var baseItemModel in _levelData.GetAiBases(level))
         {
-            var baseItem = _poolManager.Create<BaseItem>(baseItemModel.prefab, _arena, baseItemModel.position,
+            var baseItem = _poolManager.Draw<BaseItem>(baseItemModel.prefab, _arena, baseItemModel.position,
                 baseItemModel.rotation);
             _baseItems.Add(baseItem);
         }
@@ -81,13 +81,14 @@ public class GameManager : BaseInjectable, IAwake, IStart, IDisable
             var lvlCount = _levelData.GetLevelsCount();
             if (_level == lvlCount) _level = 0;
             
-            _eventManager.TriggerEvent<OnLevelOverEvent>();
             _confetti.Play();
 
             foreach (var baseItem in _baseItems)
             {
-                _poolManager.GetPool(typeof(BaseItem)).Deactivate(baseItem);
+                if(baseItem.gameObject.activeSelf)_poolManager.Remove(baseItem);
             }
+            
+            _baseItems.Clear();
             
             InitializeLevel(_level);
             

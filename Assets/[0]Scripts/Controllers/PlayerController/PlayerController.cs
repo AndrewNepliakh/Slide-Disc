@@ -46,10 +46,10 @@ public class PlayerController : MonoBehaviour
 
         if (_player != null) _player.transform.position = _playerStartPosition;
         
-        _stretchArrow = _poolManager.Create<StretchArrow>(_stretchArrowPrefab, _puck.transform);
+        _stretchArrow = _poolManager.Draw<StretchArrow>(_stretchArrowPrefab, _puck.transform);
         _stretchArrow.gameObject.SetActive(false);
 
-        _arrow = _poolManager.Create<Arrow>(_arrowPrefab, _player.transform);
+        _arrow = _poolManager.Draw<Arrow>(_arrowPrefab, _player.transform);
         _arrow.gameObject.SetActive(false);
 
         _eventManager.Add<OnPuckCollideEvent>(OnPuckCollide);

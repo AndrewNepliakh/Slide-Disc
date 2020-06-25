@@ -29,7 +29,7 @@ public class PopupManager : BaseInjectable, IAwake
         else
         {
             var popupPrefab = Resources.Load<GameObject>("UI/Popups/" + typeof(T));
-            var newPopup = _poolManager.Create<T>(popupPrefab, _uiParent);
+            var newPopup = _poolManager.Draw<T>(popupPrefab, _uiParent);
             newPopup.Show(obj);
             return newPopup;
         }
