@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseItemModels:
   - playerBaseItemType: 1
-    prefab: {fileID: 7233652222259844676, guid: 0e9223cc9862a794fa4b9a49da602ee3,
+    prefab: {fileID: 5321627406514731496, guid: a51282d574143bd43956a05985e9ba4c,
       type: 3}
     position: {x: -5, y: 0, z: 16}
     rotation: {x: 0, y: 0, z: 0}
   - playerBaseItemType: 1
-    prefab: {fileID: 7233652222259844676, guid: 0e9223cc9862a794fa4b9a49da602ee3,
+    prefab: {fileID: 5321627406514731496, guid: a51282d574143bd43956a05985e9ba4c,
       type: 3}
     position: {x: 0, y: 0, z: 16}
     rotation: {x: 0, y: 0, z: 0}
   - playerBaseItemType: 1
-    prefab: {fileID: 7233652222259844676, guid: 0e9223cc9862a794fa4b9a49da602ee3,
+    prefab: {fileID: 5321627406514731496, guid: a51282d574143bd43956a05985e9ba4c,
       type: 3}
     position: {x: 5, y: 0, z: 16}
     rotation: {x: 0, y: 0, z: 0}

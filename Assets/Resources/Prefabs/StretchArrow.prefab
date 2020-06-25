@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 2573635797117540831}
   - component: {fileID: 7114569377804367166}
   m_Layer: 0
-  m_Name: StretchLineArrow
+  m_Name: StretchArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2573635797117540831
 Transform:
   m_ObjectHideFlags: 0
@@ -24,9 +24,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 662374482859486077}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.9983144, z: 0, w: 0.05803828}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0.5512939}
   m_Children:
   - {fileID: 6923502923703972230}
   m_Father: {fileID: 0}

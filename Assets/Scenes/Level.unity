@@ -344,6 +344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PuckSide: 0
+  IsPuckLocked: 0
   _particleSystem: {fileID: 1114083265}
 --- !u!64 &332192492
 MeshCollider:
@@ -20366,6 +20367,7 @@ GameObject:
   - component: {fileID: 2012809028}
   - component: {fileID: 2012809027}
   - component: {fileID: 2012809029}
+  - component: {fileID: 2012809030}
   m_Layer: 0
   m_Name: '[EnterPoint]'
   m_TagString: Untagged
@@ -20390,6 +20392,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8cb5a7cf75f2ef448af0e568e85b3ccc, type: 2}
   - {fileID: 11400000, guid: 0ccbd98aae4c8c547a5be9ca2c420b36, type: 2}
   - {fileID: 11400000, guid: 9529946a6d48c254198c71caea59bafe, type: 2}
+  - {fileID: 11400000, guid: cbda924a9b1f84e4c85d7a8ae798ede3, type: 2}
 --- !u!4 &2012809028
 Transform:
   m_ObjectHideFlags: 0
@@ -20414,6 +20417,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 173636e1c0e1ce64da868e75b18017cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2012809030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012809026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2f48a3cf81b5845b5601332adba9c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!23 &858429156947529407

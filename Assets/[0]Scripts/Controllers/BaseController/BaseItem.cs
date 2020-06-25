@@ -20,55 +20,70 @@ public class BaseItem : MonoBehaviour, IPoolable
 
     private PoolManager _poolManager;
 
-    private void Start()
+    private MeshFilter _meshFilter;
+    private SkinnedMeshRenderer _skinnedMeshRenderer;
+    private Collider _collider;
+    private MeshRenderer _meshRenderer;
+    private Renderer _renderer;
+
+    public void InitBaseItem()
     {
         _piecesParent = GameObject.Find("[Pieces]").transform;
         _poolManager = InjectBox.Get<PoolManager>();
+
+        _meshFilter = GetComponent<MeshFilter>();
+        _skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
+        _collider = GetComponent<Collider>();
+        _meshRenderer = GetComponent<MeshRenderer>();
+        _renderer = GetComponent<Renderer>();
+    }
+
+    public void SetColor(Color color)
+    {
+        _renderer.material.color = color;
     }
 
     public void DestroyMesh(bool destroy)
     {
-        _poolManager.Remove(this);
-        
-        // if (_destroyRoutine == null) _destroyRoutine = StartCoroutine(SplitMesh(destroy));
-        // if (_destroyRoutine != null)
-        // {
-        //     StopCoroutine(_destroyRoutine);
-        //     _destroyRoutine = null;
-        //     _destroyRoutine = StartCoroutine(SplitMesh(destroy));
-        // }
+        if (_destroyRoutine == null) _destroyRoutine = StartCoroutine(SplitMesh(destroy));
+        if (_destroyRoutine != null)
+        {
+            StopCoroutine(_destroyRoutine);
+            _destroyRoutine = null;
+            _destroyRoutine = StartCoroutine(SplitMesh(destroy));
+        }
     }
 
     private IEnumerator SplitMesh(bool destroy)
     {
-        if (GetComponent<MeshFilter>() == null || GetComponent<SkinnedMeshRenderer>() == null)
+        if (_meshFilter == null || _skinnedMeshRenderer == null)
         {
             yield return null;
         }
 
-        if (GetComponent<Collider>())
+        if (_collider)
         {
-            GetComponent<Collider>().enabled = false;
+            _collider.enabled = false;
         }
 
         Mesh M = new Mesh();
-        if (GetComponent<MeshFilter>())
+        if (_meshFilter)
         {
-            M = GetComponent<MeshFilter>().mesh;
+            M = _meshFilter.mesh;
         }
-        else if (GetComponent<SkinnedMeshRenderer>())
+        else if (_skinnedMeshRenderer)
         {
-            M = GetComponent<SkinnedMeshRenderer>().sharedMesh;
+            M = _skinnedMeshRenderer.sharedMesh;
         }
 
         Material[] materials = new Material[0];
-        if (GetComponent<MeshRenderer>())
+        if (_meshRenderer)
         {
-            materials = GetComponent<MeshRenderer>().materials;
+            materials = _meshRenderer.materials;
         }
-        else if (GetComponent<SkinnedMeshRenderer>())
+        else if (_skinnedMeshRenderer)
         {
-            materials = GetComponent<SkinnedMeshRenderer>().materials;
+            materials = _skinnedMeshRenderer.materials;
         }
 
         Vector3[] verts = M.vertices;
@@ -113,12 +128,15 @@ public class BaseItem : MonoBehaviour, IPoolable
             }
         }
 
-        GetComponent<Renderer>().enabled = false;
+        _renderer.enabled = false;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
+        
         if (destroy == true)
         {
             _poolManager.Remove(this);
+            _collider.enabled = true;
+            _renderer.enabled = true;
         }
     }
 
