@@ -1,26 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 [CreateAssetMenu(fileName = "GameManager", menuName = "Managers/GameManager")]
 public class GameManager : BaseInjectable, IAwake, IStart, IDisable
 {
+    private User _currentUser;
+    
     private int _level;
-    private ParticleSystem _confetti;
-    private Transform _arena;
-
-    private Coroutine _nextLevelRoutine;
-
     private int _playerBaseItems;
     private int _aiBaseItems;
-
+    
+    private ParticleSystem _confetti;
+    private Transform _arena;
+    private Coroutine _nextLevelRoutine;
+    
     private LevelData _levelData;
     private ColorData _colorData;
     
     private PoolManager _poolManager;
     private EventManager _eventManager;
+    private PopupManager _popupManager;
+    private UserManager _userManager;
+
     private GameManagerMonobehaviour _gameManagerMonobehaviour;
 
     private List<BaseItem> _baseItems;
@@ -32,7 +38,10 @@ public class GameManager : BaseInjectable, IAwake, IStart, IDisable
         
         _poolManager = InjectBox.Get<PoolManager>();
         _eventManager = InjectBox.Get<EventManager>();
+        _popupManager = InjectBox.Get<PopupManager>();
+        _userManager = InjectBox.Get<UserManager>();
 
+        _currentUser = _userManager.CreateNewUser();
         _level = 0;
         _arena = GameObject.Find("Arena").GetComponent<Transform>();
         _confetti = GameObject.Find("Confetti").GetComponent<ParticleSystem>();
@@ -44,6 +53,8 @@ public class GameManager : BaseInjectable, IAwake, IStart, IDisable
     public void OnStart()
     {
         _gameManagerMonobehaviour.SetUp(this);
+        _popupManager.ShowPopup<MainPopup>();
+
         InitializeLevel(_level);
     }
 
@@ -53,6 +64,9 @@ public class GameManager : BaseInjectable, IAwake, IStart, IDisable
         _aiBaseItems = _levelData.GetAiBases(level).Count;
 
         BuildBases(level);
+        
+        var onLevelLoadedArgs = new OnLevelLoadedEvent {Level = _level, CurrentUser = _currentUser};
+        _eventManager.TriggerEvent(onLevelLoadedArgs);
     }
 
     private void BuildBases(int level)
@@ -113,7 +127,11 @@ public class GameManager : BaseInjectable, IAwake, IStart, IDisable
         
         InitializeLevel(level);
     }
-    
+
+    public User GetCurrentUser()
+    {
+        return _currentUser;
+    }
 
     public void LocalDisable()
     {

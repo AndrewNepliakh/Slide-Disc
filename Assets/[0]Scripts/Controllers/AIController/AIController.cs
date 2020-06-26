@@ -8,6 +8,7 @@ public class AIController : MonoBehaviour, IPoolable
     private Puck _puck;
     private Rigidbody _aiRigidbody;
     private Rigidbody _puckRigidbody;
+    private Vector3 _startPosition = new Vector3(0.0f ,0.0f, 5.0f);
 
     private EventManager _eventManager;
 

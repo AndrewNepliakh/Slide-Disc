@@ -11,8 +11,10 @@ public enum BaseItemSide
     AiBaseItem
 }
 
-public class BaseItem : MonoBehaviour, IPoolable
+public class BaseItem : MonoBehaviour, IPoolable, IScorable
 {
+    public ScorableItemType ScorableItemType { get; set; }
+    
     public BaseItemSide BaseItemSide;
 
     private Coroutine _destroyRoutine;
@@ -36,6 +38,8 @@ public class BaseItem : MonoBehaviour, IPoolable
         _collider = GetComponent<Collider>();
         _meshRenderer = GetComponent<MeshRenderer>();
         _renderer = GetComponent<Renderer>();
+
+        SetScorableItemType();
     }
 
     public void SetColor(Color color)
@@ -148,5 +152,11 @@ public class BaseItem : MonoBehaviour, IPoolable
     public void OnDeactivate(object argument = default)
     {
         gameObject.SetActive(false);
+    }
+
+    private void SetScorableItemType()
+    {
+        Type type = typeof(BaseItem);
+        ScorableItemType = (ScorableItemType)Enum.Parse(typeof(ScorableItemType), type.ToString());
     }
 }

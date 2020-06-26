@@ -210,6 +210,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        _eventManager.Remove<OnPuckCollideEvent>(OnPuckCollide);
+        //_eventManager.Remove<OnPuckCollideEvent>(OnPuckCollide);
     }
 }

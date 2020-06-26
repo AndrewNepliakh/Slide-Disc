@@ -26,7 +26,7 @@ public class EnterPoint : Singleton<EnterPoint>
             entity.LocalStart();
         }
     }
-
+    
     private void OnApplicationQuit()
     {
         InjectBox.DisableAll();

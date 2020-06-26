@@ -16,11 +16,13 @@ public class Puck : MonoBehaviour
 
     private EventManager _eventManager;
     private GameManager _gameManager;
+    private ScoreData _scoreData;
 
     private void Start()
     {
         _eventManager = InjectBox.Get<EventManager>();
         _gameManager = InjectBox.Get<GameManager>();
+        _scoreData = InjectBox.Get<ScoreData>();
         
         transform.position = _puckStartPosition;
         _rigidbody = GetComponent<Rigidbody>();
@@ -28,7 +30,29 @@ public class Puck : MonoBehaviour
 
     private void OnCollisionEnter(Collision col)
     {
-        var baseItem = col.gameObject.GetComponent<BaseItem>();
+        CheckForScorableItem(col);
+        DoCollisionWithItem(col);
+    }
+
+    private void CheckForScorableItem(Collision collision)
+    {
+        if (PuckSide == BaseItemSide.PlayerBaseItem)
+        {
+            var baseItem = collision.gameObject.GetComponent<BaseItem>();
+            if (baseItem != null && baseItem.BaseItemSide != PuckSide)
+            {
+                if (_scoreData.GetItemScoreValue(collision, out int scr))
+                {
+                    var eventArgs = new OnScoreGainedEvent { Score = _gameManager.GetCurrentUser().AddScores(scr) };
+                    _eventManager.TriggerEvent(eventArgs);
+                }
+            }
+        }
+    }
+
+    private void DoCollisionWithItem(Collision collision)
+    {
+        var baseItem = collision.gameObject.GetComponent<BaseItem>();
         
         _eventManager.TriggerEvent<OnPuckCollideEvent>();
         
@@ -37,7 +61,7 @@ public class Puck : MonoBehaviour
             if (baseItem.CompareTag("BaseItem") && baseItem.BaseItemSide != PuckSide)
             {
                 baseItem.DestroyMesh(true);
-                
+
                 if(baseItem.BaseItemSide == BaseItemSide.PlayerBaseItem) _gameManager.RemovePlayerBaseItem();
                 if(baseItem.BaseItemSide == BaseItemSide.AiBaseItem) _gameManager.RemoveAIBaseItem();
 
@@ -50,5 +74,4 @@ public class Puck : MonoBehaviour
         }
     }
     
-  
 }
